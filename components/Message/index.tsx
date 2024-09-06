@@ -3,7 +3,7 @@ import { MessageProps } from "@/types/type";
 import relativeTime from "dayjs/plugin/relativeTime";
 import dayjs from "dayjs";
 dayjs.extend(relativeTime);
-export const Index = ({ message }: MessageProps) => {
+export const MessageItem = ({ message }: MessageProps) => {
   const isMyMessage = () => {
     return message.user.id === "u1";
   };
@@ -20,4 +20,4 @@ export const Index = ({ message }: MessageProps) => {
     </View>
   );
 };
-export default Index;
+export default MessageItem;

@@ -1,21 +1,14 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { ChatItemProps } from "@/types/type";
+import { ChatItemProps, ContactItemProps } from "@/types/type";
 import { useRouter } from "expo-router";
 import relativeTime from "dayjs/plugin/relativeTime";
 import dayjs from "dayjs";
 dayjs.extend(relativeTime);
 
-const ChatListItem = ({ chat }: ChatItemProps) => {
-  const router = useRouter();
-
+const ChatListItem = ({ user }: ContactItemProps) => {
   return (
     <TouchableOpacity
-      onPress={() =>
-        router.push({
-          pathname: "/chat/[id]",
-          params: { id: chat.id, name: chat.user.name },
-        })
-      }
+      onPress={() => {}}
       className={
         "flex-row mx-2 my-1 p-1 space-x-2 items-center justify-center border-b pb-2 border-gray-100"
       }
@@ -24,7 +17,7 @@ const ChatListItem = ({ chat }: ChatItemProps) => {
         <Image
           source={{
             uri:
-              chat.user.image ||
+              user.image ||
               "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/lukas.jpeg",
           }}
           className={"w-full h-full rounded-full"}
@@ -32,15 +25,10 @@ const ChatListItem = ({ chat }: ChatItemProps) => {
         />
       </View>
       <View className="flex-1 h-full ">
-        <View className={"flex-row items-center justify-between "}>
-          <Text className={"font-bold "}>{chat.user.name}</Text>
-          <Text className={"font-bold text-gray-500"}>
-            {dayjs(chat.lastMessage.createdAt).fromNow()}
-          </Text>
+        <View className={"flex-row items-center "}>
+          <Text className={"font-bold "}>{user.name}</Text>
         </View>
-        <Text numberOfLines={2} className={"text-gray-500"}>
-          {chat.lastMessage.text}
-        </Text>
+        <Text className={"text-gray-500"}>{user.status}</Text>
       </View>
     </TouchableOpacity>
   );

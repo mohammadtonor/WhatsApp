@@ -4,12 +4,14 @@
     "user": {
       "id": "u2",
       "name": "Lukas",
-      "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/lukas.jpeg"
+      "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/lukas.jpeg",
+      "status": "Hey, what`s up"
     },
     "lastMessage": {
       "id": "m1",
       "text": "Well done this sprint, guys!",
-      "createdAt": "2024-09-04T22:30:00.000Z"
+      "createdAt": "2024-09-04T22:30:00.000Z",
+
     }
   },
   {

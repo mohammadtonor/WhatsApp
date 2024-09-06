@@ -8,23 +8,29 @@ import { bg, messages } from "@/constants";
 import Index from "@/components/Message";
 import { SafeAreaView } from "react-native-safe-area-context";
 import InputBox from "@/components/InputBox";
-import { router } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useEffect } from "react";
 
-const Id = () => {
+const ChatScreen = () => {
+  const params = useLocalSearchParams();
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.setOptions({ title: params.name });
+  }, [params]);
+
   return (
-    <SafeAreaView className="flex-1">
-      <ImageBackground source={bg} className={"flex-1"}>
-        <FlatList
-          data={messages}
-          renderItem={({ item }) => <Index message={item} />}
-          contentContainerStyle={{
-            marginVertical: 5,
-          }}
-          inverted
-        />
-        <InputBox />
-      </ImageBackground>
-    </SafeAreaView>
+    <ImageBackground source={bg} className={"flex-1"}>
+      <FlatList
+        data={messages}
+        renderItem={({ item }) => <Index message={item} />}
+        contentContainerStyle={{
+          paddingVertical: 0,
+        }}
+        inverted
+      />
+      <InputBox />
+    </ImageBackground>
   );
 };
-export default Id;
+export default ChatScreen;

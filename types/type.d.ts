@@ -14,6 +14,15 @@ export declare interface ChatItemProps {
   };
 }
 
+export declare interface ContactItemProps {
+  user: {
+    id: string;
+    name: string;
+    image: string;
+    status?: string;
+  };
+}
+
 export declare interface MessageProps {
   message: {
     id: string;

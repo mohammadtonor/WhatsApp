@@ -1,35 +1,30 @@
 import { Tabs } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Entypo } from "@expo/vector-icons";
 
 export default function RootLayout() {
   return (
     <Tabs
       initialRouteName={"chats"}
-      screenOptions={
-        {
-          // tabBarActiveTintColor: "white",
-          // tabBarInactiveTintColor: "white",
-          // tabBarShowLabel: false,
-          // tabBarStyle: {
-          //   backgroundColor: "#333333",
-          //   borderRadius: 50,
-          //   marginHorizontal: 20,
-          //   paddingBottom: 0,
-          //   marginBottom: 5,
-          //   height: 78,
-          //   display: "flex",
-          //   justifyContent: "space-between",
-          //   alignItems: "center",
-          //   flexDirection: "row",
-          //   position: "absolute",
-          // },
-        }
-      }
+      screenOptions={{
+        headerTitleStyle: {
+          marginLeft: 150,
+          width: "100%",
+        },
+        tabBarStyle: {
+          backgroundColor: "whitesmoke",
+          height: 60,
+          paddingBottom: 10,
+        },
+        headerStyle: {
+          backgroundColor: "whitesmoke",
+        },
+      }}
     >
       <Tabs.Screen
-        name={"chat"}
+        name={"status"}
         options={{
-          title: "Chats",
+          title: "Status",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="logo-whatsapp" size={size} color={color} />
@@ -47,14 +42,23 @@ export default function RootLayout() {
         }}
       />
       <Tabs.Screen
-        name={"settings"}
-        options={{
-          title: "Settings",
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings-outline" size={size} color={color} />
+        name={"chat"}
+        options={({ navigation }) => ({
+          headerRight: () => (
+            <Entypo
+              onPress={() => navigation.navigate("contact")}
+              name="new-message"
+              size={18}
+              color={"royalblue"}
+              style={{ marginRight: 15 }}
+            />
           ),
-        }}
+          title: "Chat",
+          // headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="chatbubbles-sharp" size={size} color={color} />
+          ),
+        })}
       />
       <Tabs.Screen
         name={"camera"}
@@ -67,12 +71,12 @@ export default function RootLayout() {
         }}
       />
       <Tabs.Screen
-        name={"status"}
+        name={"settings"}
         options={{
-          title: "Camera",
+          title: "Settings",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings" size={size} color={color} />
+            <Ionicons name="settings-outline" size={size} color={color} />
           ),
         }}
       />

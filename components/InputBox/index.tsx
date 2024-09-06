@@ -1,8 +1,13 @@
-import { View, StyleSheet, TextInput, Alert } from "react-native";
+import { StyleSheet, TextInput, Alert, View } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useState } from "react";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 const InputBox = () => {
+  const insets = useSafeAreaInsets();
   const [newMessage, setNewMessage] = useState("");
 
   const onSend = () => {
@@ -12,7 +17,12 @@ const InputBox = () => {
     setNewMessage("");
   };
   return (
-    <View className="flex-row items-center bg-white/70 p-1.5">
+    <View
+      style={{
+        paddingBottom: insets.top - 5,
+      }}
+      className="flex-row items-center bg-white/70 px-2 pt-1"
+    >
       <AntDesign name="plus" size={24} color="royalblue" />
       <TextInput
         value={newMessage}
