@@ -4,16 +4,7 @@ import { useEffect, useState } from "react";
 
 const Status = () => {
   const [authUser, setAuthUser] = useState(null);
-  useEffect(() => {
-    const fetch = async () => {
-      const authUser = await Auth.currentAuthenticatedUser({
-        bypassCache: true,
-      });
-      setAuthUser(authUser);
-    };
-    fetch();
-  }, []);
-  console.log(authUser?.attributes?.email);
+
   return (
     <View className="flex-1 justify-center items-center">
       <Text className="text-lg font-medium text-gray-500">

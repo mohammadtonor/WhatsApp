@@ -10,7 +10,8 @@ const ChatListItem = ({ user }: ContactItemProps) => {
     <TouchableOpacity
       onPress={() => {}}
       className={
-        "flex-row mx-2 my-1 p-1 space-x-2 items-center justify-center border-b pb-2 border-gray-100"
+        "flex-row mx-2 my-1 p-1 space-x-2 items-center bg-white" +
+        " justify-center"
       }
     >
       <View className={"relative w-16 h-16"}>
