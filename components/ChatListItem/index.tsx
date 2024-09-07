@@ -17,7 +17,7 @@ const ChatListItem = ({ chat }: ChatItemProps) => {
         })
       }
       className={
-        "flex-row mx-2 my-1 p-1 space-x-2 items-center justify-center border-b pb-2 border-gray-100"
+        "flex-row  my-[1px] p-1 mx-2 space-x-2 bg-white items-center justify-center  pb-2 "
       }
     >
       <View className={"relative w-16 h-16"}>

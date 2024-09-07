@@ -1,16 +1,13 @@
 import { Tabs } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Entypo } from "@expo/vector-icons";
+import { Text, View } from "react-native";
 
 export default function RootLayout() {
   return (
     <Tabs
       initialRouteName={"chats"}
       screenOptions={{
-        headerTitleStyle: {
-          marginLeft: 150,
-          width: "100%",
-        },
         tabBarStyle: {
           backgroundColor: "whitesmoke",
           height: 60,
@@ -53,7 +50,8 @@ export default function RootLayout() {
               style={{ marginRight: 15 }}
             />
           ),
-          title: "Chat",
+          headerTitleAlign: "center",
+          title: "Chats",
           // headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="chatbubbles-sharp" size={size} color={color} />

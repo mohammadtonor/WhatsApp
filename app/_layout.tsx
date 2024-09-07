@@ -5,7 +5,7 @@ import { Amplify } from "aws-amplify";
 //@ts-ignore
 import { withAuthenticator } from "aws-amplify-react-native";
 
-Amplify.configure(awsmobile);
+Amplify.configure({ ...awsmobile });
 
 NativeWindStyleSheet.setOutput({
   default: "native",
