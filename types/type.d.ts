@@ -6,12 +6,18 @@ export declare interface ChatItemProps {
       name: string;
       image: string;
     };
-    lastMessage: {
+    LastMessages: {
       id: string;
       text: string;
       createdAt: string;
     };
   };
+}
+
+export declare interface UserProps {
+  id: string;
+  name: string;
+  image: string;
 }
 
 export declare interface ContactItemProps {

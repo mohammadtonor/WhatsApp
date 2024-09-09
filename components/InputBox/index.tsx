@@ -5,21 +5,40 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import { API, Auth, graphqlOperation } from "aws-amplify";
+import { createMessage, updateChatRoom } from "@/graphql/mutations";
 
-const InputBox = () => {
+const InputBox = ({ chatroom }: { chatroom: any }) => {
   const insets = useSafeAreaInsets();
   const [newMessage, setNewMessage] = useState("");
 
-  const onSend = () => {
-    console.log("send New message", newMessage);
-    Alert.alert("send New message", newMessage);
+  const onSend = async () => {
+    const authUser = await Auth.currentAuthenticatedUser();
+    const messageBody = {
+      chatroomID: chatroom.id,
+      text: newMessage,
+      userID: authUser.attributes.sub,
+    };
+    const createdMessage = await API.graphql(
+      graphqlOperation(createMessage, { input: messageBody }),
+    );
+
+    await API.graphql(
+      graphqlOperation(updateChatRoom, {
+        input: {
+          id: chatroom?.id,
+          //@ts-ignore
+          chatRoomLastMessagesId: createdMessage?.data?.createMessage?.id,
+        },
+      }),
+    );
 
     setNewMessage("");
   };
   return (
     <View
       style={{
-        paddingBottom: insets.top - 5,
+        paddingBottom: insets.top - 20,
       }}
       className="flex-row items-center bg-white/70 px-2 pt-1"
     >

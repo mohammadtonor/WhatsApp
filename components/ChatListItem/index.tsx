@@ -1,19 +1,33 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { ChatItemProps } from "@/types/type";
+import { ChatItemProps, UserProps } from "@/types/type";
 import { useRouter } from "expo-router";
 import relativeTime from "dayjs/plugin/relativeTime";
 import dayjs from "dayjs";
+import { Auth } from "aws-amplify";
+import { useEffect, useState } from "react";
 dayjs.extend(relativeTime);
 
 const ChatListItem = ({ chat }: ChatItemProps) => {
+  const [user, setUser] = useState<UserProps>({ id: "", name: "", image: "" });
   const router = useRouter();
 
+  useEffect(() => {
+    const getAuthUser = async () => {
+      const authUser = await Auth.currentAuthenticatedUser();
+      //@ts-ignore
+      const user = chat?.users?.items.find(
+        (user: any) => user.user.id !== authUser.attributes.sub,
+      ).user;
+      setUser(user);
+    };
+    getAuthUser();
+  }, []);
   return (
     <TouchableOpacity
       onPress={() =>
         router.push({
           pathname: "/chat/[id]",
-          params: { id: chat.id, name: chat.user.name },
+          params: { id: chat?.id, name: user?.name },
         })
       }
       className={
@@ -24,7 +38,7 @@ const ChatListItem = ({ chat }: ChatItemProps) => {
         <Image
           source={{
             uri:
-              chat.user.image ||
+              user?.image ||
               "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/lukas.jpeg",
           }}
           className={"w-full h-full rounded-full"}
@@ -33,13 +47,14 @@ const ChatListItem = ({ chat }: ChatItemProps) => {
       </View>
       <View className="flex-1 h-full ">
         <View className={"flex-row items-center justify-between "}>
-          <Text className={"font-bold "}>{chat.user.name}</Text>
+          <Text className={"font-bold "}>{user?.name}</Text>
           <Text className={"font-bold text-gray-500"}>
-            {dayjs(chat.lastMessage.createdAt).fromNow()}
+            {chat?.LastMessages?.createdAt &&
+              dayjs(chat?.LastMessages?.createdAt).fromNow()}
           </Text>
         </View>
         <Text numberOfLines={2} className={"text-gray-500"}>
-          {chat.lastMessage.text}
+          {chat?.LastMessages?.text}
         </Text>
       </View>
     </TouchableOpacity>
