@@ -3,25 +3,51 @@ import { ChatItemProps, UserProps } from "@/types/type";
 import { useRouter } from "expo-router";
 import relativeTime from "dayjs/plugin/relativeTime";
 import dayjs from "dayjs";
-import { Auth } from "aws-amplify";
+import { API, Auth, graphqlOperation } from "aws-amplify";
 import { useEffect, useState } from "react";
+import { onUpdateChatRoom } from "@/graphql/subscriptions";
 dayjs.extend(relativeTime);
 
 const ChatListItem = ({ chat }: ChatItemProps) => {
   const [user, setUser] = useState<UserProps>({ id: "", name: "", image: "" });
+  const [chatRoom, setChatRoom] = useState(chat);
   const router = useRouter();
+
+  useEffect(() => {
+    const subscription = API.graphql(
+      graphqlOperation(onUpdateChatRoom, {
+        filter: { id: { eq: chat?.id } },
+      }),
+      //@ts-ignore
+    )?.subscribe({
+      //@ts-ignore
+      next: ({ value }) => {
+        setChatRoom((cr) => ({
+          ...(cr || {}),
+          ...value.data.onUpdateChatRoom,
+        }));
+      },
+      //@ts-ignore
+      error: (error) => {
+        console.log(error);
+      },
+    });
+
+    return () => subscription.unsubscribe();
+  }, [chat?.id]);
 
   useEffect(() => {
     const getAuthUser = async () => {
       const authUser = await Auth.currentAuthenticatedUser();
       //@ts-ignore
       const user = chat?.users?.items.find(
-        (user: any) => user.user.id !== authUser.attributes.sub,
-      ).user;
+        (user: any) => user.user?.id !== authUser.attributes.sub,
+      )?.user;
       setUser(user);
     };
     getAuthUser();
   }, []);
+
   return (
     <TouchableOpacity
       onPress={() =>
@@ -49,12 +75,12 @@ const ChatListItem = ({ chat }: ChatItemProps) => {
         <View className={"flex-row items-center justify-between "}>
           <Text className={"font-bold "}>{user?.name}</Text>
           <Text className={"font-bold text-gray-500"}>
-            {chat?.LastMessages?.createdAt &&
-              dayjs(chat?.LastMessages?.createdAt).fromNow()}
+            {chatRoom?.LastMessages?.createdAt &&
+              dayjs(chatRoom?.LastMessages?.createdAt).fromNow()}
           </Text>
         </View>
         <Text numberOfLines={2} className={"text-gray-500"}>
-          {chat?.LastMessages?.text}
+          {chatRoom?.LastMessages?.text}
         </Text>
       </View>
     </TouchableOpacity>

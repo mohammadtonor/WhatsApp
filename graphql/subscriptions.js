@@ -50,6 +50,8 @@ export const onUpdateChatRoom = /* GraphQL */ `
   subscription OnUpdateChatRoom($filter: ModelSubscriptionChatRoomFilterInput) {
     onUpdateChatRoom(filter: $filter) {
       id
+      image
+      name
       Messages {
         items {
           id

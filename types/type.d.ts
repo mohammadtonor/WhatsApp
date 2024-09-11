@@ -21,6 +21,9 @@ export declare interface UserProps {
 }
 
 export declare interface ContactItemProps {
+  handleOnPress: (id?: string) => void;
+  selectable?: boolean;
+  isSelected?: boolean;
   user: {
     id: string;
     name: string;

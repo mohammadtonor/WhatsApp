@@ -4,6 +4,7 @@ export default function RootLayout() {
   return (
     <Stack>
       <Stack.Screen name="chat/[id]" />
+      <Stack.Screen name="new-group" />
       <Stack.Screen
         name="contact"
         options={{

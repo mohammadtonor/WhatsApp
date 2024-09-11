@@ -145,16 +145,18 @@ export const messagesByUserID = /* GraphQL */ `
     }
   }
 `;
-export const messagesByChatroomID = /* GraphQL */ `
-  query MessagesByChatroomID(
+export const listMessagesByChatroomID = /* GraphQL */ `
+  query ListMessagesByChatroomID(
     $chatroomID: ID!
+    $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelMessageFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    messagesByChatroomID(
+    listMessagesByChatroom(
       chatroomID: $chatroomID
+      createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
