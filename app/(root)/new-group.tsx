@@ -78,7 +78,7 @@ const NewGroup = () => {
   return (
     <View style={styles.container}>
       <TextInput
-        placeholder="Group name"
+        placeholder="Id name"
         value={name}
         onChangeText={setName}
         style={styles.input}

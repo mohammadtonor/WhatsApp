@@ -2,7 +2,7 @@ import { ActivityIndicator, FlatList, ImageBackground } from "react-native";
 import { bg } from "../../../constants";
 import Index from "../../../components/Message";
 import InputBox from "../../../components/InputBox";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import { API, graphqlOperation } from "aws-amplify";
 import {
@@ -11,6 +11,7 @@ import {
 } from "../../../graphql/queries";
 import { onCreateMessage } from "../../../graphql/subscriptions";
 import { onUpdateChatRoom } from "../../../graphql/subscriptions";
+import { Feather } from "@expo/vector-icons";
 
 const ChatScreen = () => {
   const [chatRoomMessages, setChatRoomMessages] = useState();
@@ -74,13 +75,27 @@ const ChatScreen = () => {
   }, [params?.id]);
 
   useEffect(() => {
-    navigation.setOptions({ title: params.name });
+    navigation.setOptions({
+      title: params.name,
+      headerRight: () => (
+        <Feather
+          name={"more-vertical"}
+          size={24}
+          color={"gray"}
+          onPress={() =>
+            router.push({
+              pathname: "/(root)/group/[id]",
+              params: { id: chatRoomId },
+            })
+          }
+        />
+      ),
+    });
   }, [params.name]);
 
   if (!chatRoomMessages) {
     return <ActivityIndicator />;
   }
-  console.log(JSON.stringify(chatRoom));
   return (
     <ImageBackground source={bg} className={"flex-1"}>
       <FlatList

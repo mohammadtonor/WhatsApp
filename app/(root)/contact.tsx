@@ -33,7 +33,7 @@ const Contact = () => {
         return;
       }
       const newChatRoomData = await API.graphql(
-        graphqlOperation(createChatRoom, { input: {} }),
+        graphqlOperation(createChatRoom, { input: { name: user?.name } }),
       );
       //@ts-ignore
       const newChatRoom = newChatRoomData?.data?.createChatRoom;

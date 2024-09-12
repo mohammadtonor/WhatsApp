@@ -8,6 +8,8 @@ export const createChatRoom = /* GraphQL */ `
   ) {
     createChatRoom(input: $input, condition: $condition) {
       id
+      name
+      image
       Messages {
         items {
           id

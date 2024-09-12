@@ -1,15 +1,14 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { ChatItemProps, UserProps } from "@/types/type";
 import { useRouter } from "expo-router";
 import relativeTime from "dayjs/plugin/relativeTime";
 import dayjs from "dayjs";
 import { API, Auth, graphqlOperation } from "aws-amplify";
-import { useEffect, useState } from "react";
-import { onUpdateChatRoom } from "@/graphql/subscriptions";
+import { useEffect, useMemo, useState } from "react";
+import { onUpdateChatRoom } from "../../graphql/subscriptions";
 dayjs.extend(relativeTime);
 
-const ChatListItem = ({ chat }: ChatItemProps) => {
-  const [user, setUser] = useState<UserProps>({ id: "", name: "", image: "" });
+const ChatListItem = ({ chat }) => {
+  const [user, setUser] = useState({ id: "", name: "", image: "" });
   const [chatRoom, setChatRoom] = useState(chat);
   const router = useRouter();
 
@@ -41,7 +40,7 @@ const ChatListItem = ({ chat }: ChatItemProps) => {
       const authUser = await Auth.currentAuthenticatedUser();
       //@ts-ignore
       const user = chat?.users?.items.find(
-        (user: any) => user.user?.id !== authUser.attributes.sub,
+        (user) => user.user?.id !== authUser.attributes.sub,
       )?.user;
       setUser(user);
     };
@@ -53,7 +52,7 @@ const ChatListItem = ({ chat }: ChatItemProps) => {
       onPress={() =>
         router.push({
           pathname: "/chat/[id]",
-          params: { id: chat?.id, name: user?.name },
+          params: { id: chat?.id, name: chat?.name || user?.name },
         })
       }
       className={
@@ -64,6 +63,7 @@ const ChatListItem = ({ chat }: ChatItemProps) => {
         <Image
           source={{
             uri:
+              chat?.image ||
               user?.image ||
               "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/lukas.jpeg",
           }}
@@ -73,7 +73,7 @@ const ChatListItem = ({ chat }: ChatItemProps) => {
       </View>
       <View className="flex-1 h-full ">
         <View className={"flex-row items-center justify-between "}>
-          <Text className={"font-bold "}>{user?.name}</Text>
+          <Text className={"font-bold "}>{chat?.name || user?.name}</Text>
           <Text className={"font-bold text-gray-500"}>
             {chatRoom?.LastMessages?.createdAt &&
               dayjs(chatRoom?.LastMessages?.createdAt).fromNow()}
