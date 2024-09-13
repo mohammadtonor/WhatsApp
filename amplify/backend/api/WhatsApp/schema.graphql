@@ -5,16 +5,17 @@ type ChatRoom @model @auth(rules: [{allow: public}]) {
   Messages: [Message] @hasMany(indexName: "byChatRoom", fields: ["id"])
   users: [User] @manyToMany(relationName: "UserChatRoom")
   LastMessages: Message @hasOne
+  isPrivate: Boolean
 }
 
 type Message @model @auth(rules: [{allow: public}]) {
   id: ID!
   text: String
   userID: ID! @index(name: "byUser")
-  chatroomID: ID! @index(name: "byChatRoom", sortKeyFields:["createdAt"], queryField: "listMessagesByChatroom")
+  chatroomID: ID! @index(name: "byChatRoom", sortKeyFields: ["createdAt"], queryField: "listMessagesByChatroom")
   createdAt: AWSDateTime!
+  images: [String]
 }
-
 
 type User @model @auth(rules: [{allow: public}]) {
   id: ID!
@@ -24,3 +25,4 @@ type User @model @auth(rules: [{allow: public}]) {
   Messages: [Message] @hasMany(indexName: "byUser", fields: ["id"])
   ChatRooms: [ChatRoom] @manyToMany(relationName: "UserChatRoom")
 }
+ 

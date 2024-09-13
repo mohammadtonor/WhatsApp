@@ -12,6 +12,7 @@ import {
 import { onCreateMessage } from "../../../graphql/subscriptions";
 import { onUpdateChatRoom } from "../../../graphql/subscriptions";
 import { Feather } from "@expo/vector-icons";
+import { listMessagesByChatroom } from "../../../src/graphql/queries";
 
 const ChatScreen = () => {
   const [chatRoomMessages, setChatRoomMessages] = useState();
@@ -48,7 +49,7 @@ const ChatScreen = () => {
   //Fetch listMessage by chatRoom
   useEffect(() => {
     API.graphql(
-      graphqlOperation(listMessagesByChatroomID, {
+      graphqlOperation(listMessagesByChatroom, {
         chatroomID: chatRoomId,
         sortDirection: "DESC",
       }),

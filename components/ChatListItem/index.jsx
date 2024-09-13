@@ -9,9 +9,12 @@ dayjs.extend(relativeTime);
 
 const ChatListItem = ({ chat }) => {
   const [user, setUser] = useState({ id: "", name: "", image: "" });
-  const [chatRoom, setChatRoom] = useState(chat);
+  const [chatRoom, setChatRoom] = useState({});
   const router = useRouter();
 
+  useEffect(() => {
+    setChatRoom(chat);
+  }, []);
   useEffect(() => {
     const subscription = API.graphql(
       graphqlOperation(onUpdateChatRoom, {
@@ -62,10 +65,11 @@ const ChatListItem = ({ chat }) => {
       <View className={"relative w-16 h-16"}>
         <Image
           source={{
-            uri:
-              chat?.image ||
-              user?.image ||
-              "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/lukas.jpeg",
+            uri: chatRoom?.isPrivate
+              ? user?.image ||
+                "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/lukas.jpeg"
+              : chatRoom?.image ||
+                "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/lukas.jpeg",
           }}
           className={"w-full h-full rounded-full"}
           resizeMode={"contain"}
@@ -73,14 +77,16 @@ const ChatListItem = ({ chat }) => {
       </View>
       <View className="flex-1 h-full ">
         <View className={"flex-row items-center justify-between "}>
-          <Text className={"font-bold "}>{chat?.name || user?.name}</Text>
+          <Text className={"font-bold "}>
+            {chat?.isPrivate ? user?.name : chat?.name}
+          </Text>
           <Text className={"font-bold text-gray-500"}>
-            {chatRoom?.LastMessages?.createdAt &&
-              dayjs(chatRoom?.LastMessages?.createdAt).fromNow()}
+            {chat?.LastMessages?.createdAt &&
+              dayjs(chat?.LastMessages?.createdAt).fromNow()}
           </Text>
         </View>
         <Text numberOfLines={2} className={"text-gray-500"}>
-          {chatRoom?.LastMessages?.text}
+          {chat?.LastMessages?.text}
         </Text>
       </View>
     </TouchableOpacity>

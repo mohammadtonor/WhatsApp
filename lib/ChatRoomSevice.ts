@@ -8,11 +8,14 @@ export const getChatRoomExist = async (userID: string) => {
   //@ts-ignore
   const chatRoom = response?.data?.getUser?.ChatRooms?.items || [];
   //@ts-ignore
-  return chatRoom.find((item) =>
-    item?.chatRoom?.users?.items?.some(
-      //@ts-ignore
-      (userItem) => userItem?.user?.id === userID,
-    ),
+  return chatRoom.find(
+    //@ts-ignore
+    (item) =>
+      item?.chatRoom?.isPrivate &&
+      item?.chatRoom?.users?.items?.some(
+        //@ts-ignore
+        (userItem) => userItem?.user?.id === userID,
+      ),
   );
 };
 
@@ -23,6 +26,7 @@ const chatRoomUserList = /* GraphQL */ `
         items {
           chatRoom {
             id
+            isPrivate
             users {
               items {
                 user {

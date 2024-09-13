@@ -1,10 +1,10 @@
 import { FlatList } from "react-native";
 import { useEffect, useState } from "react";
 import { API, Auth, graphqlOperation } from "aws-amplify";
-import { getUserChatRoomLists } from "@/lib/queries";
+import { getUserChatRoomLists } from "../../../lib/queries";
 import ChatListItem from "../../../components/ChatListItem";
 import { onCreateChatRoom } from "../../../graphql/subscriptions";
-import { useLocalSearchParams, usePathname } from "expo-router";
+import { usePathname } from "expo-router";
 
 const Chat = () => {
   const [chats, setChats] = useState([]);
@@ -23,14 +23,27 @@ const Chat = () => {
       (room1, room2) =>
         new Date(room2.chatRoom.updatedAt) - new Date(room1.chatRoom.updatedAt),
     );
+    console.log(sortedChatRooms[0]);
     setChats(sortedChatRooms);
     setLoading(false);
   };
 
   useEffect(() => {
     fetchChatRooms();
+    //Subscribe to new message
+    // const subscription = API.graphql(
+    //   graphqlOperation(onCreateChatRoom),
+    // )?.subscribe({
+    //   next: ({ value }) => {
+    //     setChats((chats) => [value?.data?.onCreateChatRoom, ...chats]);
+    //   },
+    //   error: (err) => {
+    //     console.log(err);
+    //   },
+    // });
+    // return () => subscription.unsubscribe();
   }, [params]);
-
+  console.log(chats[0]);
   return (
     <FlatList
       style={{

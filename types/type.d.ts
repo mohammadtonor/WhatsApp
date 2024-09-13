@@ -37,6 +37,7 @@ export declare interface MessageProps {
     id: string;
     text: string;
     createdAt: string;
+    images: string[];
     user: {
       id: string;
       name: string;

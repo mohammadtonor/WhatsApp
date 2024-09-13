@@ -14,6 +14,7 @@ export const getChatRoom = /* GraphQL */ `
           userID
           chatroomID
           createdAt
+          images
           updatedAt
           __typename
         }
@@ -38,9 +39,11 @@ export const getChatRoom = /* GraphQL */ `
         userID
         chatroomID
         createdAt
+        images
         updatedAt
         __typename
       }
+      isPrivate
       createdAt
       updatedAt
       chatRoomLastMessagesId
@@ -73,9 +76,11 @@ export const listChatRooms = /* GraphQL */ `
           userID
           chatroomID
           createdAt
+          images
           updatedAt
           __typename
         }
+        isPrivate
         createdAt
         updatedAt
         chatRoomLastMessagesId
@@ -94,6 +99,7 @@ export const getMessage = /* GraphQL */ `
       userID
       chatroomID
       createdAt
+      images
       updatedAt
       __typename
     }
@@ -112,6 +118,7 @@ export const listMessages = /* GraphQL */ `
         userID
         chatroomID
         createdAt
+        images
         updatedAt
         __typename
       }
@@ -141,6 +148,7 @@ export const messagesByUserID = /* GraphQL */ `
         userID
         chatroomID
         createdAt
+        images
         updatedAt
         __typename
       }
@@ -172,6 +180,7 @@ export const listMessagesByChatroom = /* GraphQL */ `
         userID
         chatroomID
         createdAt
+        images
         updatedAt
         __typename
       }
@@ -194,6 +203,7 @@ export const getUser = /* GraphQL */ `
           userID
           chatroomID
           createdAt
+          images
           updatedAt
           __typename
         }
@@ -271,9 +281,11 @@ export const getUserChatRoom = /* GraphQL */ `
           userID
           chatroomID
           createdAt
+          images
           updatedAt
           __typename
         }
+        isPrivate
         createdAt
         updatedAt
         chatRoomLastMessagesId
@@ -317,6 +329,7 @@ export const listUserChatRooms = /* GraphQL */ `
           id
           name
           image
+          isPrivate
           createdAt
           updatedAt
           chatRoomLastMessagesId
@@ -363,6 +376,7 @@ export const userChatRoomsByChatRoomId = /* GraphQL */ `
           id
           name
           image
+          isPrivate
           createdAt
           updatedAt
           chatRoomLastMessagesId
@@ -409,6 +423,7 @@ export const userChatRoomsByUserId = /* GraphQL */ `
           id
           name
           image
+          isPrivate
           createdAt
           updatedAt
           chatRoomLastMessagesId
