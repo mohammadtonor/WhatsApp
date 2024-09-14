@@ -1,4 +1,11 @@
-import { StyleSheet, TextInput, Alert, View, Image } from "react-native";
+import {
+  StyleSheet,
+  TextInput,
+  Alert,
+  View,
+  Image,
+  FlatList,
+} from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useState } from "react";
 import {
@@ -10,10 +17,11 @@ import { createMessage, updateChatRoom } from "../../graphql/mutations";
 import * as ImagePicker from "expo-image-picker";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
+import { createAttachment } from "../../src/graphql/mutations";
 const InputBox = ({ chatroom }) => {
   const insets = useSafeAreaInsets();
   const [newMessage, setNewMessage] = useState("");
-  const [image, setImage] = useState(null);
+  const [files, setFiles] = useState([]);
 
   const onSend = async () => {
     const authUser = await Auth.currentAuthenticatedUser();
@@ -23,14 +31,23 @@ const InputBox = ({ chatroom }) => {
       userID: authUser.attributes.sub,
     };
 
-    if (image) {
-      messageBody.images = await uploadFile(image);
-      setImage(null);
-    }
+    // if (images.length > 0) {
+    //   messageBody.images = await Promise.all(images.map(uploadFile));
+    //   setImage(null);
+    // }
+
     const createdMessage = await API.graphql(
       graphqlOperation(createMessage, { input: messageBody }),
     );
 
+    setNewMessage(null);
+    console.log(createdMessage);
+    await Promise.all(
+      files.map((image) =>
+        addAttachment(image, createdMessage?.data?.createMessage?.id),
+      ),
+    );
+    setFiles(null);
     await API.graphql(
       graphqlOperation(updateChatRoom, {
         input: {
@@ -40,28 +57,47 @@ const InputBox = ({ chatroom }) => {
         },
       }),
     );
+  };
 
-    setNewMessage(null);
+  const addAttachment = async (file, messageID) => {
+    const types = {
+      image: "IMAGE",
+      video: "VIDEO",
+    };
+
+    const newAttachment = {
+      storageKey: await uploadFile(file),
+      type: types[file.type],
+      width: file.width,
+      height: file.height,
+      duration: file.duration,
+      messageID,
+      chatroomID: chatroom.id,
+    };
+    return API.graphql(
+      graphqlOperation(createAttachment, { input: newAttachment }),
+    );
   };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsMultipleSelection: true,
       quality: 1,
     });
     //@ts-ignore
     if (!result?.cancelled) {
       //@ts-ignore
-      setImage(result.assets[0]);
+      setFiles(result.assets);
     }
   };
+
   const uploadFile = async (fileUri) => {
     try {
       const response = await fetch(fileUri.uri);
       const blob = await response.blob();
       const key = `${uuidv4()}.${fileUri.fileName?.split(".")[1]}`;
-      console.log(key);
       await Storage.put(key, blob, {
         contentType: `${fileUri.mimeType}`, // contentType is optional
       });
@@ -72,19 +108,34 @@ const InputBox = ({ chatroom }) => {
   };
   return (
     <>
-      {image && (
+      {files?.length > 0 && (
         <View style={styleSheet.attachmentsContainer}>
-          <Image
-            source={{ uri: image?.uri }}
-            style={styleSheet.selectedImage}
-            resizeMode="contain"
-          />
-          <MaterialIcons
-            name="highlight-remove"
-            onPress={() => setImage(null)}
-            size={20}
-            color="gray"
-            style={styleSheet.removeSelectedImage}
+          <FlatList
+            keyExtractor={({ item }) => item?.fileName}
+            horizontal
+            data={files}
+            renderItem={({ item }) => (
+              <>
+                <Image
+                  source={{ uri: item.uri }}
+                  style={styleSheet.selectedImage}
+                  resizeMode="contain"
+                />
+                <MaterialIcons
+                  name="highlight-remove"
+                  onPress={() =>
+                    setFiles((images) =>
+                      images.filter(
+                        (image) => item.fileName !== image.fileName,
+                      ),
+                    )
+                  }
+                  size={20}
+                  color="gray"
+                  style={styleSheet.removeSelectedImage}
+                />
+              </>
+            )}
           />
         </View>
       )}
