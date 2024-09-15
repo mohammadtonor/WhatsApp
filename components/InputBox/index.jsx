@@ -48,6 +48,7 @@ const InputBox = ({ chatroom }) => {
       ),
     );
     setFiles(null);
+
     await API.graphql(
       graphqlOperation(updateChatRoom, {
         input: {

@@ -23,7 +23,6 @@ const Chat = () => {
       (room1, room2) =>
         new Date(room2.chatRoom.updatedAt) - new Date(room1.chatRoom.updatedAt),
     );
-    console.log(sortedChatRooms[0]);
     setChats(sortedChatRooms);
     setLoading(false);
   };

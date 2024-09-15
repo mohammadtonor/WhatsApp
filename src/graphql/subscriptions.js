@@ -145,6 +145,15 @@ export const onUpdateChatRoom = /* GraphQL */ `
           images
           updatedAt
           __typename
+          Attachments {
+            items {
+              storageKey
+              id
+              duration
+              type
+              width
+            }
+          }
         }
         nextToken
         __typename
@@ -278,9 +287,10 @@ export const onCreateMessage = /* GraphQL */ `
       text
       userID
       chatroomID
-      createdAt
       images
+      createdAt
       Attachments {
+        nextToken
         items {
           id
           storageKey
@@ -288,17 +298,10 @@ export const onCreateMessage = /* GraphQL */ `
           width
           height
           duration
-          messageID
-          chatroomID
           createdAt
           updatedAt
-          __typename
         }
-        nextToken
-        __typename
       }
-      updatedAt
-      __typename
     }
   }
 `;

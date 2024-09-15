@@ -16,6 +16,7 @@ import { listMessagesByChatroom } from "../../../lib/queries";
 const ChatScreen = () => {
   const [chatRoomMessages, setChatRoomMessages] = useState();
   const [chatRoom, setChatRoom] = useState();
+  const [newMessageID, setNewMessageID] = useState(null);
   const params = useLocalSearchParams();
   const navigation = useNavigation();
   const chatRoomId = params.id;
@@ -67,6 +68,7 @@ const ChatScreen = () => {
           value?.data?.onCreateMessage,
           ...messages,
         ]);
+        setNewMessageID(value?.data?.onCreateMessage?.id);
       },
       error: (err) => {
         console.log(err);
