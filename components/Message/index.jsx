@@ -52,6 +52,7 @@ export const MessageItem = ({ message }) => {
 
   return (
     <View
+      key={message?.id}
       className={`bg-white p-2 px-1 m-2 max-w-[80%] self-end rounded-lg shadow-lg  shadow-slate-700
     ${isMe ? "self-end bg-green-400 " : "self-start bg-white"}`}
     >

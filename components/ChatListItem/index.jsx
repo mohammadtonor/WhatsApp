@@ -52,6 +52,7 @@ const ChatListItem = ({ chat }) => {
 
   return (
     <TouchableOpacity
+      key={chat?.id}
       onPress={() =>
         router.push({
           pathname: "/chat/[id]",

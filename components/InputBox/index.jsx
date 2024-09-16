@@ -5,6 +5,7 @@ import {
   View,
   Image,
   FlatList,
+  Text,
 } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { useState } from "react";
@@ -22,6 +23,7 @@ const InputBox = ({ chatroom }) => {
   const insets = useSafeAreaInsets();
   const [newMessage, setNewMessage] = useState("");
   const [files, setFiles] = useState([]);
+  const [progress, setProgress] = useState({});
 
   const onSend = async () => {
     const authUser = await Auth.currentAuthenticatedUser();
@@ -30,11 +32,6 @@ const InputBox = ({ chatroom }) => {
       text: newMessage,
       userID: authUser.attributes.sub,
     };
-
-    // if (images.length > 0) {
-    //   messageBody.images = await Promise.all(images.map(uploadFile));
-    //   setImage(null);
-    // }
 
     const createdMessage = await API.graphql(
       graphqlOperation(createMessage, { input: messageBody }),
@@ -101,6 +98,13 @@ const InputBox = ({ chatroom }) => {
       const key = `${uuidv4()}.${fileUri.fileName?.split(".")[1]}`;
       await Storage.put(key, blob, {
         contentType: `${fileUri.mimeType}`, // contentType is optional
+        progressCallback: (progress) => {
+          console.log(`Uploaded ${progress?.loaded} / ${progress?.total}`);
+          setProgress((p) => ({
+            ...p,
+            [fileUri.uri]: progress?.loaded / progress.total,
+          }));
+        },
       });
       return key;
     } catch (err) {
@@ -122,6 +126,15 @@ const InputBox = ({ chatroom }) => {
                   style={styleSheet.selectedImage}
                   resizeMode="contain"
                 />
+
+                {progress[item.uri] && (
+                  <View className="absolute top-1/3 left-1/2 bg-gray-500 rounded-xl p-2">
+                    <Text className="text-white font-bold">
+                      {(progress[item?.uri] * 100)?.toFixed(0)} %
+                    </Text>
+                  </View>
+                )}
+
                 <MaterialIcons
                   name="highlight-remove"
                   onPress={() =>
@@ -181,7 +194,7 @@ const styleSheet = StyleSheet.create({
     alignItems: "flex-end",
   },
   selectedImage: {
-    height: 100,
+    height: 150,
     width: 200,
     margin: 5,
   },

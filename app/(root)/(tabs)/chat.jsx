@@ -49,7 +49,6 @@ const Chat = () => {
         backgroundColor: "white",
         paddingTop: 4,
       }}
-      keyExtractor={({ item }) => item?.chatRoom?.id}
       //@ts-ignore
       renderItem={({ item }) => <ChatListItem chat={item?.chatRoom} />}
       data={chats}
