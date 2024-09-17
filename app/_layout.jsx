@@ -8,7 +8,7 @@ import { getUser } from "../graphql/queries";
 import { createUser } from "../graphql/mutations";
 
 Amplify.configure({ ...awsmobile });
-
+//test
 NativeWindStyleSheet.setOutput({
   default: "native",
 });
