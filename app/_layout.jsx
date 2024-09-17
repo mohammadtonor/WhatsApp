@@ -2,9 +2,7 @@ import { Stack } from "expo-router";
 import { NativeWindStyleSheet } from "nativewind";
 import awsmobile from "../aws-exports";
 import { Amplify, API, Auth, graphqlOperation } from "aws-amplify";
-//@ts-ignore
 import { withAuthenticator } from "aws-amplify-react-native";
-import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { getUser } from "../graphql/queries";
 import { createUser } from "../graphql/mutations";
