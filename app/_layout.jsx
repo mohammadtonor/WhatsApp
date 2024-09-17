@@ -12,6 +12,7 @@ Amplify.configure({ ...awsmobile });
 NativeWindStyleSheet.setOutput({
   default: "native",
 });
+//test
 function RootLayout() {
   useEffect(() => {
     const asyncUser = async () => {
